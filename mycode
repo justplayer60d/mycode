@@ -1,0 +1,99 @@
+from pygame import *
+
+# Initialize Pygame
+init()
+
+# Game settings
+dx = 700
+dy = 700
+
+# Screen settings
+width = 1600
+height = 1000
+windows = display.set_mode((width, height))
+screen = display.get_surface()
+
+# Load and scale the log image (only load once)
+rect_img = image.load("cars.jpg")
+rect_img = transform.scale(rect_img, (50, 100))
+
+# Initialize music
+mixer.init()
+mixer.music.load("music.mp3")  # Ensure this path is correct
+#mixer.music.play(loops=-1, start=0.0)
+
+# Load and scale the player image
+playerImg = image.load("frog.png")
+playerImg = transform.scale(playerImg, (200, 180))
+px = 0
+py = 0  # Added variable for vertical movement
+player = Rect(650, 900, 100, 80)  # Define player position
+rect_color = (0, 0, 255)  # Blue color
+rect_pos = (100, 100, 200, 150)  # (x, y, width, height)
+# Main game loop
+exitProg = False
+
+def drawinvader():
+
+
+
+
+	return invader
+invader = drawinvader()
+px = 0
+while not exitProg:
+    for e in event.get():
+        if e.type == QUIT:
+            exitProg = True
+        if e.type == KEYDOWN:
+            if e.key == K_RIGHT:
+                px = 1
+            elif e.key == K_LEFT:
+                px = -1
+            elif e.key == K_DOWN:
+                py = 1# Move down
+            elif e.key == K_UP:
+                py = -1# Move up
+        if e.type == KEYUP:
+            if e.key == K_LEFT or e.key == K_RIGHT:
+                px = 0
+            if e.key == K_UP or e.key == K_DOWN:
+                py = 0  # Stop vertical movement
+
+    # Clear the screen (fill with a color, e.g., black background)
+    screen.fill((0, 0, 0))  # Background color
+
+    # Move the player and prevent going out of bounds
+    if player.x + px <= 0 or player.right + px >= width:
+        px = 0
+    if player.y + py <= 0 or player.bottom + py >= height:
+        py = 0  # Prevent moving out of screen vertically
+
+
+
+    player.move_ip(px, py)
+
+    # Draw the logs at their respective positions
+    screen.blit(rect_img, (0, 1000))
+    screen.blit(rect_img, (0, 800))
+    screen.blit(rect_img, (0, 600))
+    screen.blit(rect_img, (0, 400))
+    screen.blit(rect_img, (0, 200))
+    draw.rect(screen, rect_color, (0, 900, 1600, 100))
+    draw.rect(screen, rect_color, (0, 700, 1600, 100))
+    draw.rect(screen, rect_color, (0, 300, 1600, 100))
+    draw.rect(screen, rect_color, (0, 500, 1600, 100))
+    draw.rect(screen, rect_color, (0, 100, 1600, 100))
+
+
+
+
+    # Draw the player image at its position (using the player's rect)
+    
+    screen.blit(playerImg, player)
+
+    # Update the display
+    display.update()
+
+# Quit Pygame
+quit()
