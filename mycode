@@ -47,13 +47,13 @@ while not exitProg:
             exitProg = True
         if e.type == KEYDOWN:
             if e.key == K_RIGHT:
-                px = 1
+		posx += 2         
             elif e.key == K_LEFT:
-                px = -1
+                posx += -2
             elif e.key == K_DOWN:
-                py = 1# Move down
+                posy = 2# Move down
             elif e.key == K_UP:
-                py = -1# Move up
+                posy = -1# Move upp
         if e.type == KEYUP:
             if e.key == K_LEFT or e.key == K_RIGHT:
                 px = 0
