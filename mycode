@@ -9,19 +9,25 @@ width, height = 1600, 1000
 screen = display.set_mode((width, height))
 
 # Load and scale images
+log_img = image.load("log.png")
+log_img = transform.scale(log_img, (100, 25))
 car_img = image.load("teemoalien.png")
-car_img = transform.scale(car_img, (100, 50))  # Adjusted for horizontal movement
+car_img = transform.scale(car_img, (100, 25))  # Adjusted for horizontal movement
 
 playerImg = image.load("masked-affectionate.png")
-playerImg = transform.scale(playerImg, (100, 50))
+playerImg = transform.scale(playerImg, (100, 25))
 
 # Player settings
-player = Rect(650, 900, 50, 100)  # Define player position
+player = Rect(650, 900, 100, 25)  # Define player position
 
-# Car settings
-lanes_y = [500, 400, 300, 200, ]  # Fixed Y positions
-car_speed = 1
-cars = [Rect(random.randint(-300, 0), y, 50, 100) for y in lanes_y]  # Spawn cars at random x on the left
+# Car/log settings
+river_y = [50, 100, 150, 200, 250]
+log_speed = 1
+logs = [Rect(random.randint(-300, 0), L, 50, 5) for L in river_y]
+
+lanes_y = [800, 700, 600, 500, 400 ]  # Fixed Y positions
+car_speed = 4
+cars = [Rect(random.randint(-300, 0), y, 100, 25) for y in lanes_y]  # Spawn cars at random x on the left
 
 exitProg = False
 
@@ -39,27 +45,42 @@ while not exitProg:
             elif e.key == K_UP and player.top > 0:
                 player.move_ip(0, -50)
     #collision
-    for car in cars:
+#    for car in cars:
+ #       if car.colliderect(player):
+ #           exitProg = True 
+    for log in logs:
         if car.colliderect(player):
-            exitProg = True 
+            
+
+
 
     # Clear screen
     screen.fill((0, 0, 0))
 
+
+
+    # draw water 
+    draw.rect(screen, (0, 0, 255), (0, 0, 1600, 300)) 
+    # Draw road blocks
+    draw.rect(screen, (50, 50, 50), (0, 800, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 700, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 600, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 500, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 400, 1600, 50))
     # Move cars right and respawn if off screen
     for car in cars:
         car.x += car_speed
         if car.x > width:  # If car moves off screen
             car.x = random.randint(-300, -100)  # Respawn off-screen on the left
-
         screen.blit(car_img, car.topleft)
-
-    # Draw road blocks
-    draw.rect(screen, (50, 50, 50), (0, 450, 1600, 50))
-    draw.rect(screen, (50, 50, 50), (0, 350, 1600, 50))
-    draw.rect(screen, (50, 50, 50), (0, 250, 1600, 50))
-    draw.rect(screen, (50, 50, 50), (0, 150, 1600, 50))
-    draw.rect(screen, (50, 50, 50), (0, 50, 1600, 50))
+    for log in logs:
+        log.x += log_speed 
+        if log.x > width:
+            log.x = random.randint(-300, -100)
+        screen.blit(log_img, log.topleft)
+        if player.y < 300:
+            if player.y != log.y:
+                exitProg = True
 
     # Draw player
     screen.blit(playerImg, player.topleft)
