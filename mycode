@@ -13,13 +13,13 @@ car_img = image.load("teemoalien.png")
 car_img = transform.scale(car_img, (100, 50))  # Adjusted for horizontal movement
 
 playerImg = image.load("masked-affectionate.png")
-playerImg = transform.scale(playerImg, (200, 180))
+playerImg = transform.scale(playerImg, (100, 50))
 
 # Player settings
 player = Rect(650, 900, 50, 100)  # Define player position
 
 # Car settings
-lanes_y = [1000, 800, 600, 400, 200]  # Fixed Y positions
+lanes_y = [500, 400, 300, 200, ]  # Fixed Y positions
 car_speed = 1
 cars = [Rect(random.randint(-300, 0), y, 50, 100) for y in lanes_y]  # Spawn cars at random x on the left
 
@@ -55,11 +55,11 @@ while not exitProg:
         screen.blit(car_img, car.topleft)
 
     # Draw road blocks
-    draw.rect(screen, (50, 50, 50), (0, 900, 1600, 100))
-    draw.rect(screen, (50, 50, 50), (0, 700, 1600, 100))
-    draw.rect(screen, (50, 50, 50), (0, 500, 1600, 100))
-    draw.rect(screen, (50, 50, 50), (0, 300, 1600, 100))
-    draw.rect(screen, (50, 50, 50), (0, 100, 1600, 100))
+    draw.rect(screen, (50, 50, 50), (0, 450, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 350, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 250, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 150, 1600, 50))
+    draw.rect(screen, (50, 50, 50), (0, 50, 1600, 50))
 
     # Draw player
     screen.blit(playerImg, player.topleft)
