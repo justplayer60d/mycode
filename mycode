@@ -63,7 +63,7 @@ while not exitProg:
 
     # Check if player is in water and not on a log
     if player.y < 300 and not on_log:
-        if time.get_ticks() - last_on_log > 200:  
+        if time.get_ticks() - last_on_log > 400:  
             exitProg = True  
 
     # Clear screen
@@ -96,3 +96,5 @@ while not exitProg:
     display.update()
 
 quit()
+
+
