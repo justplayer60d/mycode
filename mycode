@@ -7,31 +7,32 @@ init()
 # Screen settings
 width, height = 1600, 1000
 screen = display.set_mode((width, height))
-
+mixer.music.load("music.mp3")
+mixer.music.play(-1)
 # Load and scale images
-
+ 
 rock_img = image.load("rock.png")
 rock_img = transform.scale(rock_img, (50, 50))
 log_img = image.load("log.png")
 log_img = transform.scale(log_img, (100, 25))
-car_img = image.load("teemoalien.png")
+car_img = image.load("cars.jpg")
 car_img = transform.scale(car_img, (50, 50))  # Adjusted for horizontal movement
-playerImg = image.load("masked-affectionate.png")
+playerImg = image.load("frog.png")
 playerImg = transform.scale(playerImg, (50, 50))
 
 # Player settings
-player = Rect(650, 950, 100, 25)  # Define player position
+player = Rect(650, 950, 100, 1)  # Define player position
 
 # Car/log settings
 river_y = [150, 200, 250, 300, 350]
 log_speed = 1
 logs = [Rect(random.randint(-300, -200), L, 50, 5) for L in river_y]
 rock_y = [850, 750, 650, 550, 450]
-rocks = [Rect((random.randint(350, 750)), y, 25, 1) for y in rock_y]
-
-
+rocks = [Rect((random.randint(350, 750)), y, 25, 0) for y in rock_y]
+lives = 4
+lanes_x = [900, 800, 700, 600, 500]
 lanes_y = [850, 750, 650, 550, 450]
-car_speed = 4
+car_speed = 3
 cars = [Rect(random.randint(-300, 0), y, 100, 25) for y in lanes_y]
 
 exitProg = False
@@ -51,11 +52,21 @@ while not exitProg:
                 player.move_ip(0, 50)
             elif e.key == K_UP and player.top > 0:
                 player.move_ip(0, -50)
+
      #collision with car 
     for car in cars:
         if car.colliderect(player):
-            exitProg = True 
-        
+            mixer.music.rewind()
+            lives-= 1
+            player.x = 650
+            player.y = 950
+            if lives == 0:
+                exitProg = True 
+   
+   #game timer
+    
+  
+    
 
     on_log = False
 
@@ -71,8 +82,13 @@ while not exitProg:
 
     # Check if player is in water and not on a log
     if player.y < 400 and player.y > 100 and not on_log:
-        if time.get_ticks() - last_on_log > 150:  
-            exitProg = True  
+        if time.get_ticks() - last_on_log > 700:  
+            mixer.music.rewind()
+            lives -= 1 
+            player.x = 650
+            player.y = 950            
+            if lives == 0:
+                exitProg = True  
 
     # Clear screen
     screen.fill((0, 0, 0))
@@ -82,7 +98,9 @@ while not exitProg:
 
     # Draw road blocks
     for y in lanes_y:
-        draw.rect(screen, (50, 50, 50), (0, y, 1600, 50))
+        draw.rect(screen, (0, 0, 0), (0, y, 1600, 50))
+    for x in lanes_x:
+        draw.rect(screen, (128, 128, 128), (0, x, 1600, 50))
 
     # Move cars and respawn if off screen
     for car in cars:
@@ -95,13 +113,23 @@ while not exitProg:
     for log in logs:
         log.x += log_speed
         if log.x > width:
-            log.x = random.randint(-300, -200)
+            log.x = random.randint(-250, -200)
         screen.blit(log_img, log.topleft)
     #draw rock
     for rock in rocks*2:
         screen.blit(rock_img, rock.topleft)
         if rock.colliderect(player):
-            exitProg = True 
+            mixer.music.rewind()
+            lives -= 1
+            player.x = 650
+            player.y = 950
+            if lives == 0:
+                exitProg = True 
+    timer_for_g = time.get_ticks()
+    if  timer_for_g > 28000:
+        lives -= 1
+        if lives == 0:
+            exitProg = True
 
 
         
