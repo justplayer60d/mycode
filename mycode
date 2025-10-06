@@ -1,145 +1,57 @@
-from pygame import *
-import random
+#create all possible combinations 
+#number_of_rows = 2**n 
+# n = number of combinations
+n = 2 
+if n == 2:
+	variables = ["A", "B"]
+	possible_values = [
+    (0, 0),
+    (0, 1),
+    (1, 0),
+    (1, 1)]
 
-# Initialize Pygame
-init()
-
-# Screen settings
-width, height = 1600, 1000
-screen = display.set_mode((width, height))
-mixer.music.load("music.mp3")
-mixer.music.play(-1)
-# Load and scale images
- 
-rock_img = image.load("rock.png")
-rock_img = transform.scale(rock_img, (50, 50))
-log_img = image.load("log.png")
-log_img = transform.scale(log_img, (100, 25))
-car_img = image.load("cars.jpg")
-car_img = transform.scale(car_img, (50, 50))  # Adjusted for horizontal movement
-playerImg = image.load("frog.png")
-playerImg = transform.scale(playerImg, (50, 50))
-
-# Player settings
-player = Rect(650, 950, 100, 1)  # Define player position
-
-# Car/log settings
-river_y = [150, 200, 250, 300, 350]
-log_speed = 1
-logs = [Rect(random.randint(-300, -200), L, 50, 5) for L in river_y]
-rock_y = [850, 750, 650, 550, 450]
-rocks = [Rect((random.randint(350, 750)), y, 25, 0) for y in rock_y]
-lives = 4
-lanes_x = [900, 800, 700, 600, 500]
-lanes_y = [850, 750, 650, 550, 450]
-car_speed = 3
-cars = [Rect(random.randint(-300, 0), y, 100, 25) for y in lanes_y]
-
-exitProg = False
-on_log = False
-last_on_log = time.get_ticks()  # Initialize it at the start of the program
-
-while not exitProg:
-    for e in event.get():
-        if e.type == QUIT:
-            exitProg = True
-        if e.type == KEYDOWN:
-            if e.key == K_RIGHT and player.right < width:
-                player.move_ip(50, 0)
-            elif e.key == K_LEFT and player.left > 0:
-                player.move_ip(-50, 0)
-            elif e.key == K_DOWN and player.bottom < height:
-                player.move_ip(0, 50)
-            elif e.key == K_UP and player.top > 0:
-                player.move_ip(0, -50)
-
-     #collision with car 
-    for car in cars:
-        if car.colliderect(player):
-            mixer.music.rewind()
-            lives-= 1
-            player.x = 650
-            player.y = 950
-            if lives == 0:
-                exitProg = True 
-   
-   #game timer
-    
-  
+variables = ["A", "B"]
+for combo in possible_values:
+    A, B = combo
+    print(f"A = {A}, B = {B}")
+n = 3
+if n  == 3:
+	variables = ["A", "B", "C"]
+	possible_values2 = [
+    (0, 0, 0),
+    (0, 1, 0),
+    (0, 0, 1),
+    (0, 1, 1),
+    (1, 0, 0),
+    (1, 0, 1),
+    (1, 1, 0),
+    (1, 1 ,1) ]
     
 
-    on_log = False
-
-    # Collision with logs
-    for log in logs:
-        if log.colliderect(player):
-            player.move_ip(log_speed, 0)
-            on_log = True  # Player is on a log
-
-    # Update last time on a log
-    if on_log:
-        last_on_log = time.get_ticks()  
-
-    # Check if player is in water and not on a log
-    if player.y < 400 and player.y > 100 and not on_log:
-        if time.get_ticks() - last_on_log > 700:  
-            mixer.music.rewind()
-            lives -= 1 
-            player.x = 650
-            player.y = 950            
-            if lives == 0:
-                exitProg = True  
-
-    # Clear screen
-    screen.fill((0, 0, 0))
-
-    # Draw water
-    draw.rect(screen, (0, 0, 255), (0, 150, 1600, 250))
-
-    # Draw road blocks
-    for y in lanes_y:
-        draw.rect(screen, (0, 0, 0), (0, y, 1600, 50))
-    for x in lanes_x:
-        draw.rect(screen, (128, 128, 128), (0, x, 1600, 50))
-
-    # Move cars and respawn if off screen
-    for car in cars:
-        car.x += car_speed
-        if car.x > width:
-            car.x = random.randint(-300, -200)  # Respawn off-screen
-        screen.blit(car_img, car.topleft)
-
-    # Move logs and respawn if off screen
-    for log in logs:
-        log.x += log_speed
-        if log.x > width:
-            log.x = random.randint(-250, -200)
-        screen.blit(log_img, log.topleft)
-    #draw rock
-    for rock in rocks*2:
-        screen.blit(rock_img, rock.topleft)
-        if rock.colliderect(player):
-            mixer.music.rewind()
-            lives -= 1
-            player.x = 650
-            player.y = 950
-            if lives == 0:
-                exitProg = True 
-    timer_for_g = time.get_ticks()
-    if  timer_for_g > 28000:
-        lives -= 1
-        if lives == 0:
-            exitProg = True
-
-
-        
-    
-
-    # Draw player
-    screen.blit(playerImg, player.topleft)
-
-    display.update()
-
-quit()
-
-
+variables = ["A", "B", "C"]
+for combo1 in possible_values2:
+    A, B, C = combo1
+    print(f"A = {A}, B = {B}, C = {C}")
+n = 4
+if n == 4:
+	variables = ["A", "B", "C", "D"]
+	possible_values3 = [(0, 0, 0, 0),
+					   (0, 0, 0, 1),
+                       (0, 0, 1, 0),
+                       (0, 0, 1, 1),
+                       (0, 1, 0, 0),
+                       (0, 1, 0, 1),
+                       (0, 1, 1, 0),
+                       (0, 1, 1, 1),
+                       (1, 0, 0, 0),
+                       (1, 0, 0, 1),
+                       (1, 0, 1, 0),
+                       (1, 0, 1, 1),
+                       (1, 1, 0, 0),
+                       (1, 1, 0, 1),
+                       (1, 1, 1, 0),
+                       (1, 1, 1, 1)]
+variables = ["A", "B", "C", "D"]
+for combo1 in possible_values3:
+    A, B, C, D = combo1
+    print(f"A = {A}, B = {B}, C = {C}, D = {D}")
