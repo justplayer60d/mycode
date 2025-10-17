@@ -7,20 +7,41 @@ class ChooseVariable:
 
     def get_num_of_variables(self):
         return self.__n
+class stacks:
+    def __innit__(self,variables, operator, user_input):
+        self.__user = "(A ^ B)"
+        self.__var = []
+        self.__op = []
+def push(self):
+    all_operator = ["(",")","V","^","¬"]
+    all_variables = ["A", "B", "C", "D"]
+    for i in range(len(self.__user)):
+        for var in all_variables:
+            self.__var.append(var)
+        for op in all_operator:
+            self.__op.append(op)
+    print(self.__var)
+    print(self.__op)
+
+
+
+
 
 user = ChooseVariable(2)
 user.choose_num_of_variable()
+userI = stacks()
+userI.push()
 n = user.get_num_of_variables()
 
-#create all possible combinations 
+#create all possible combinations
 def assining_the_values(n):
 	#number of vairables
-	all_variables = ["A","B","C","D"] 
+	all_variables = ["A","B","C","D"]
 	variables = []
 	for i in range (n):
 		variables.append(all_variables[i])
 	print(variables)
-	#values for respective num of variables 
+	#values for respective num of variables
 	if n == 2:
 		values = [(0, 0),
                   (0, 1),
@@ -55,7 +76,7 @@ def assining_the_values(n):
 	def asign_values(variables, values):
 		dictonary = []
 		for row in values:
-			each_row = dict(zip(variables, row)) # found dict and zip online 
+			each_row = dict(zip(variables, row)) # found dict and zip online
 			dictonary.append(each_row)
 		return dictonary
 	return (asign_values(variables, values))
