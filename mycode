@@ -19,19 +19,55 @@ class stacks:
         all_operator = ["(", ")", "V", "^", "¬"]
         all_variables = ["A", "B", "C", "D"]
         expression_in_box = []
-        count = None
+        count = 0
+        count2 = 0
+        last_push = None
+        inside_bracket = False
         for i in range(len(self.__user)):
-            if self.__user[i] in all_variables:
-                self.__var.append(self.__user[i])
-            if self.__user[i] in all_operator and self.__user[i] != "(":
-                self.__op.append(self.__user[i])
-            if self.__user[i] == "(":
-                count = i
-            if self.__user[i] == ")" and count is not None:
-                for z in range(count + 1, i):
-                    expression_in_box.append(self.__user[z])
-        print(expression_in_box)
-        return expression_in_box, self.__var, self.__op
+
+            for i in range(len(self.__user)):
+                if self.__user[i] == "(":
+                    inside_bracket = True
+                    count = i
+
+                elif self.__user[i] == ")":
+                    inside_bracket = False
+                    # ... your bracket processing code
+
+                elif not inside_bracket:  # Track items OUTSIDE brackets only
+                    if self.__user[i] in all_variables:
+                        self.__var.append(self.__user[i])
+                        last_push = 'var'
+                    elif self.__user[i] in all_operator:
+                        self.__op.append(self.__user[i])
+                        last_push = 'op'
+                    if self.__user[i] == "(":
+                            count = i
+                    if self.__user[i] == ")" and count is not None:
+
+                        for z in range(count +1, i):
+                            if self.__user[z] in all_variables:
+                                expression_in_box.append(self.__user[z])
+                            elif self.__user[z] in all_operator and self.__user[z] not in ["(", ")"]:
+                                expression_in_box.append(self.__user[z])
+                    var_count = 0
+                    op_count = 0
+                    for item in expression_in_box:
+                        if item in all_variables:
+                            var_count += 1
+                        elif item in all_operator:
+                                op_count += 1
+
+                    for d in range(var_count):
+                        self.__var.pop()
+                    for d in range(op_count):
+                        self.__op.pop()
+
+
+        return expression_in_box, self.__var, self.__op, last_push, count2
+
+
+
 user = ChooseVariable(2)
 user.choose_num_of_variable()
 n = user.get_num_of_variables()
@@ -91,12 +127,15 @@ def assining_the_values(n):
             dictonary.append(each_row)
         return dictonary
 
+
     return asign_values(variables, values)
 
 
+
 userI = stacks()
-userI.push()
+
 all_stack = userI.push()
+print(all_stack)
 dictonary = assining_the_values(n)
 
 class boolean_calculation:
@@ -104,6 +143,8 @@ class boolean_calculation:
         self.__opStacks = all_stack[2]
         self.__varStacks = all_stack[1]
         self.__braStacks = all_stack[0]
+        self.__last_item_push = all_stack[3]
+        self.__count = all_stack[4]
 
     def calculate_bracket(self, dictonary):
         # map symbols to lambda functions
@@ -112,110 +153,34 @@ class boolean_calculation:
             "^": lambda a, b: a and b,
             "¬": lambda a: not a
         }
-        result = []
-        for i in range(len(self.__braStacks)+1):
-            row = []
-            row.append([])
-            result.append(row)
-        print(len(self.__braStacks))
+        bracket_result = []
+
+        outer_result = []
+        for row_index in range(len(dictonary)):
+            bracket_result.append([])
+        for row_index2 in range(len(dictonary)):
+            outer_result.append([])
+
+        for i in range(len(dictonary)):
+            for z in range(len(self.__braStacks)):
+                if self.__braStacks[z] in dictonary[i]:
+                    bracket_result[i].append(dictonary[i][self.__braStacks[z]])
+                else:
+                    bracket_result[i].append(self.__braStacks[z])
+            if self.__last_item_push == "var":
+                for u in range(all_stack[4]):
+                    outer_result[u].append(self.__varStacks.pop())
+                    outer_result[u].append(self.__opStacks.pop())
 
 
+        outer_answers = []
+        bracket_answers = []
+        for row in bracket_result:
+            bracket_answer = keyboard[row[1]](row[0], row[2])
+            bracket_answers.append(bracket_answer)
 
-        for i in range(len(self.__braStacks)):
-            if self.__braStacks[i] in dictonary:
-                for col in range(len(result)):
-                    for row in range(len(result[col])):
-                        result[col][row].append(dictonary[self.__braStacks[i]])
 
-
-        print(result)
 
 
 userY = boolean_calculation()
 userY.calculate_bracket(dictonary)
-
-#previous 
-class ChooseVariable:
-    def __init__(self, number_of_variables):
-        self.__n = number_of_variables
-
-    def choose_num_of_variable(self):
-        self.__n = int(input("Choose a number of variables from 2 to 4: "))
-
-    def get_num_of_variables(self):
-        return self.__n
-class stacks:
-    def __innit__(self,variables, operator, user_input):
-        self.__user = "(A ^ B)"
-        self.__var = []
-        self.__op = []
-def push(self):
-    all_operator = ["(",")","V","^","¬"]
-    all_variables = ["A", "B", "C", "D"]
-    for i in range(len(self.__user)):
-        for var in all_variables:
-            self.__var.append(var)
-        for op in all_operator:
-            self.__op.append(op)
-    print(self.__var)
-    print(self.__op)
-
-
-
-
-
-user = ChooseVariable(2)
-user.choose_num_of_variable()
-userI = stacks()
-userI.push()
-n = user.get_num_of_variables()
-
-#create all possible combinations
-def assining_the_values(n):
-	#number of vairables
-	all_variables = ["A","B","C","D"]
-	variables = []
-	for i in range (n):
-		variables.append(all_variables[i])
-	print(variables)
-	#values for respective num of variables
-	if n == 2:
-		values = [(0, 0),
-                  (0, 1),
-                  (1, 0),
-                  (1, 1)]
-	elif n == 3:
-		values = [(0, 0, 0),
-                  (0, 1, 0),
-                  (0, 0, 1),
-                  (0, 1, 1),
-                  (1, 0, 0),
-                  (1, 0, 1),
-                  (1, 1, 0),
-                  (1, 1 ,1) ]
-	elif n == 4:
-		values = [(0, 0, 0, 0),
-				  (0, 0, 0, 1),
-                  (0, 0, 1, 0),
-                  (0, 0, 1, 1),
-                  (0, 1, 0, 0),
-                  (0, 1, 0, 1),
-                  (0, 1, 1, 0),
-                  (0, 1, 1, 1),
-                  (1, 0, 0, 0),
-                  (1, 0, 0, 1),
-                  (1, 0, 1, 0),
-                  (1, 0, 1, 1),
-                  (1, 1, 0, 0),
-                  (1, 1, 0, 1),
-                  (1, 1, 1, 0),
-                  (1, 1, 1, 1)]
-	def asign_values(variables, values):
-		dictonary = []
-		for row in values:
-			each_row = dict(zip(variables, row)) # found dict and zip online
-			dictonary.append(each_row)
-		return dictonary
-	return (asign_values(variables, values))
-assinged_values = assining_the_values(n)
-print(assinged_values)
