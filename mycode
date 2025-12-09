@@ -2,39 +2,39 @@ class ChooseVariable:
     def __init__(self, number_of_variables):
         self.__n = number_of_variables
 
-    def choose_num_of_variable(self):
+    def choose_num_of_variable(self): 
         while True:
-            n = int(input("Choose a number of variables from 2 to 4: "))
+            n = int(input("Choose a number of variables from 2 to 4: ")) #ask user for the number of variable it wants to use 
             if 2 <= n <= 4:
                 self.__n = n
                 break
             else:
-                print("Invalid choice, try again.")
+                print("Invalid choice, try again.") # if user choose a number bigger then 4 or smaller then 2
 
-    def get_num_of_variables(self):
+    def get_num_of_variables(self): #returns number of variables user choose 
         return self.__n
 
 
 class stacks:
     def __init__(self):
         # Hardcoded expression for now
-        self.__user = "AV(A^B)"
-        self.__var = []
-        self.__op = []
+        self.__user = "AV(A^B)" # the boolean expression input  
+        self.__var = []   #the stack for the variables 
+        self.__op = []#stack for the operators
 
     def push(self):
-        all_operator = ["(", ")", "V", "^", "¬"]
-        all_variables = ["A", "B", "C", "D"]
-        expression_in_box = []
+        all_operator = ["(", ")", "V", "^", "¬"]#the array containing all the operators 
+        all_variables = ["A", "B", "C", "D"] #the array containing all the operators  
+        expression_in_box = []  
         last_push = None
         count = None
 
-        for i, ch in enumerate(self.__user):
-            if ch == "(":
+        for i, ch in enumerate(self.__user): #emuerate funtion loops through the user boolean expression while also keeping an index 
+            if ch == "(": # if a bracket in boolean expression is found count will store index 
                 count = i
             elif ch == ")":
                 expression_in_box = []
-                for z in range(count + 1, i):
+                for z in range(count + 1, i): 
                     if self.__user[z] in all_variables:
                         expression_in_box.append(self.__user[z])
                     elif self.__user[z] in all_operator and self.__user[z] not in ["(", ")"]:
