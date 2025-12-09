@@ -30,42 +30,43 @@ class stacks:
         count = None
 
         for i, ch in enumerate(self.__user): #emuerate funtion loops through the user boolean expression while also keeping an index 
-            if ch == "(": # if a bracket in boolean expression is found count will store index 
+            if ch == "(": # if a bracket in boolean expression is found count will store the index
                 count = i
-            elif ch == ")":
-                expression_in_box = []
-                for z in range(count + 1, i): 
-                    if self.__user[z] in all_variables:
-                        expression_in_box.append(self.__user[z])
-                    elif self.__user[z] in all_operator and self.__user[z] not in ["(", ")"]:
+            elif ch == ")": #checks when ) is found 
+                expression_in_box = []#array that stores the expression from the brackets in an array 
+                for z in range(count + 1, i): #loop from the first expression in the bracket to the last 
+                    if self.__user[z] in all_variables: #checks the list of variables avaliable
+                        expression_in_box.append(self.__user[z]) 
+                    elif self.__user[z] in all_operator and self.__user[z] not in ["(", ")"]: #checks the list of available operators and the current character isnt one of the bracket 
+                                                                                               #so not to append the brackets into the array containing the expression 
                         expression_in_box.append(self.__user[z])
             else:
-                if ch in all_variables:
-                    self.__var.append(ch)
-                    last_push = 'var'
+                if ch in all_variables: #if the character is in the list of variables 
+                    self.__var.append(ch) #adds variable into a stack for variables 
+                    last_push = 'var' #records the last item in the expression is a variable
                 elif ch in all_operator:
-                    self.__op.append(ch)
-                    last_push = 'op'
+                    self.__op.append(ch)  #adds operator into a stack for operators 
+                    last_push = 'op' #records the last item in the expression is a operator 
 
         return expression_in_box, self.__var, self.__op, last_push
 
 
-def assining_the_values(n):
+def assining_the_values(n):  #function for assigning the truth table numbers to each variable 
     # number of variables
-    all_variables = ["A", "B", "C", "D"]
+    all_variables = ["A", "B", "C", "D"] #list of the variables available 
     variables = []
     for i in range(n):
         variables.append(all_variables[i])
 
     # values for respective num of variables
-    if n == 2:
-        values = [
+    if n == 2:                  
+        values = [   # list of all numbers to be used for the truth table combination 
             (0, 0),
             (0, 1),
             (1, 0),
             (1, 1)
         ]
-    elif n == 3:
+    elif n == 3:       
         values = [
             (0, 0, 0),
             (0, 1, 0),
@@ -96,44 +97,44 @@ def assining_the_values(n):
             (1, 1, 1, 1)
         ]
 
-    dictonary = []
+    dictonary = [] 
     for row in values:
-        each_row = dict(zip(variables, row))
+        each_row = dict(zip(variables, row)) #zip pairs each item in variables with the corresponding item in row, dict converts those pairs into a dictionary
         dictonary.append(each_row)
     return dictonary
 
 
-class boolean_calculation:
-    def __init__(self, all_stack):
-        self.__opStacks = all_stack[2]
+class boolean_calculation: 
+    def __init__(self, all_stack): #stack containing the variables and the different combinations
+        self.__opStacks = all_stack[2] 
         self.__varStacks = all_stack[1]
         self.__braStacks = all_stack[0]
         self.__last_item_push = all_stack[3]
 
-    def calculate_bracket(self, dictonary):
-        keyboard = {
+    def calculate_bracket(self, dictonary):   
+        keyboard = {                         #assigns the boolean function to each operator symbol 
             "V": lambda a, b: a or b,
             "^": lambda a, b: a and b,
             "¬": lambda a: not a
         }
 
 
-        bracket_answers = []
-        for row in dictonary:
-            a = row[self.__braStacks[0]]
+        bracket_answers = [] #stores the answer from each boolean calculation
+        for row in dictonary: 
+            a = row[self.__braStacks[0]] 
             op = self.__braStacks[1]
             b = row[self.__braStacks[2]]
-            bracket_answers.append(keyboard[op](a, b))
+            bracket_answers.append(keyboard[op](a, b))    #keyboard[op](a, b) carries out the boolean calculation 
 
 
         outer_results = []
-        for i, row in enumerate(dictonary):
+        for i, row in enumerate(dictonary):  # Loop through each dictionary in 'dictonary' with its index 'i'  
             if self.__last_item_push == "var":
 
-                left = row[self.__varStacks[0]]
-                op = self.__opStacks[0]
+                left = row[self.__varStacks[0]] # Get the variable's value from the current row dictionary
+                op = self.__opStacks[0]  # Get the operator (e.g., '+', '-', etc.) from the operator stack
                 right = bracket_answers[i]
-                result = keyboard[op](left, right)
+                result = keyboard[op](left, right) # Apply the operator function to left and right operands
             else:
                 left = bracket_answers[i]
                 op = self.__opStacks[0]
