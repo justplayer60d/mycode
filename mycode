@@ -187,7 +187,75 @@ class GUI:
         self.results_text = Text(window, height=15, width=60)
         self.results_text.pack(pady=10)
 
+class Table:
+    
+    def __init__(self, root, lst, total_rows, total_columns):
+        # code for creating table
+        for i in range(total_rows):
+            for j in range(total_columns):
+                
+                self.e = Entry(root, width=20, fg='blue', #set the visuals for the truth table 
+                               font=('Arial', 16, 'bold'))
+                
+                self.e.grid(row=i, column=j)
+                self.e.insert(END, lst[i][j])
 
+# data to use to create truth table
+n = int(input("Choose a number of variables from 2 to 4: ")) # Set the number of variables (2, 3, or 4)
+
+# Create headers based on number of variables
+if n == 2:
+    headers = ['A', 'B', 'Result']
+    values = [
+        headers,  # First row is headers
+        (0, 0, ''),
+        (0, 1, ''),
+        (1, 0, ''),
+        (1, 1, '')
+    ]
+elif n == 3:
+    headers = ['A', 'B', 'C', 'Result']
+    values = [
+        headers,  # First row is headers
+        (0, 0, 0, ''),
+        (0, 1, 0, ''),
+        (0, 0, 1, ''),
+        (0, 1, 1, ''),
+        (1, 0, 0, ''),
+        (1, 0, 1, ''),
+        (1, 1, 0, ''),
+        (1, 1, 1, '')
+    ]
+elif n == 4:
+    headers = ['A', 'B', 'C', 'D', 'Result']
+    values = [
+        headers,  # First row is headers
+        (0, 0, 0, 0, ''),
+        (0, 0, 0, 1, ''),
+        (0, 0, 1, 0, ''),
+        (0, 0, 1, 1, ''),
+        (0, 1, 0, 0, ''),
+        (0, 1, 0, 1, ''),
+        (0, 1, 1, 0, ''),
+        (0, 1, 1, 1, ''),
+        (1, 0, 0, 0, ''),
+        (1, 0, 0, 1, ''),
+        (1, 0, 1, 0, ''),
+        (1, 0, 1, 1, ''),
+        (1, 1, 0, 0, ''),
+        (1, 1, 0, 1, ''),
+        (1, 1, 1, 0, ''),
+        (1, 1, 1, 1, '')
+    ]
+ 
+# find total number of rows and columns in list
+total_rows = len(values)
+total_columns = len(values[0])
+ 
+# create root window
+root = Tk()
+t = Table(root, values, total_rows, total_columns)
+root.mainloop()
 
 user = ChooseVariable(2)
 user.choose_num_of_variable()
