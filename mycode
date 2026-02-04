@@ -266,3 +266,34 @@ dictonary = assining_the_values(n)
 window = Tk()
 app = GUI(window)
 window.mainloop()
+
+import tkinter as tk 
+
+  
+
+root = tk.Tk() 
+
+root.title("Karnaugh Map")
+all_variables = ["A", "B", "C", "D"] 
+for row in range(4): 
+
+    for col in range(len(all_variables)): 
+        cell = tk.Label(root, text=f"{all_variables[col]}",  
+
+                       borderwidth=1, relief="solid", 
+
+                       width=8, height=3) 
+
+        cell.grid(row=0, column=col, padx=1, pady=1) 
+    for i in range(len(all_variables)): 
+        cell = tk.Label(root, text=f"{all_variables[row]}",  
+
+                       borderwidth=1, relief="solid", 
+
+                       width=8, height=3) 
+
+        cell.grid(row=row, column=0, padx=1, pady=1) 
+
+  
+
+root.mainloop() 
