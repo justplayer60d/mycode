@@ -1,76 +1,79 @@
 from tkinter import *
+
+
 class ChooseVariable:
     def __init__(self, number_of_variables):
         self.__n = number_of_variables
 
     def choose_num_of_variable(self):
         while True:
-            n = int(input("Choose a number of variables from 2 to 4: ")) #ask user for the number of variable it wants to use
+            n = int(input(
+                "Choose a number of variables from 2 to 4: "))  # ask user for the number of variable it wants to use
             if 2 <= n <= 4:
                 self.__n = n
                 break
             else:
-                print("Invalid choice, try again.") # if user choose a number bigger then 4 or smaller then 2
+                print("Invalid choice, try again.")  # if user choose a number bigger then 4 or smaller then 2
 
     def set_num_of_variables(self, n):
         if 2 <= n <= 4:
             self.__n = n
-            return True  #validating the number of variables chosen
-        return False # does not validate number that was chosen
+            return True  # validating the number of variables chosen
+        return False  # does not validate number that was chosen
 
-    def get_num_of_variables(self): #returns number of variables user choose
+    def get_num_of_variables(self):  # returns number of variables user choose
         return self.__n
-
 
 
 class stacks:
     def __init__(self, expression):
         # Hardcoded expression for now
-        self.__user = expression # the boolean expression input
-        self.__var = []   #the stack for the variables
-        self.__op = []#stack for the operators
+        self.__user = expression  # the boolean expression input
+        self.__var = []  # the stack for the variables
+        self.__op = []  # stack for the operators
 
     def push(self):
-        all_operator = ["(", ")", "V", "^", "¬"]#the array containing all the operators
-        all_variables = ["A", "B", "C", "D"] #the array containing all the operators
+        all_operator = ["(", ")", "V", "^", "¬"]  # the array containing all the operators
+        all_variables = ["A", "B", "C", "D"]  # the array containing all the operators
         expression_in_box = []
         last_push = None
         count = None
 
-        for i, ch in enumerate(self.__user): #emuerate funtion loops through the user boolean expression while also keeping an index
-            if ch == "(": # if a bracket in boolean expression is found count will store the index
+        for i, ch in enumerate(
+                self.__user):  # emuerate funtion loops through the user boolean expression while also keeping an index
+            if ch == "(":  # if a bracket in boolean expression is found count will store the index
                 count = i
-            elif ch == ")": #checks when ) is found
-                expression_in_box = []#array that stores the expression from the brackets in an array
-                for z in range(count + 1, i): #loop from the first expression in the bracket to the last
-                    if self.__user[z] in all_variables: #checks the list of variables avaliable
+            elif ch == ")":  # checks when ) is found
+                expression_in_box = []  # array that stores the expression from the brackets in an array
+                for z in range(count + 1, i):  # loop from the first expression in the bracket to the last
+                    if self.__user[z] in all_variables:  # checks the list of variables avaliable
                         expression_in_box.append(self.__user[z])
                     elif self.__user[z] in all_operator and self.__user[z] not in ["(", ")"]:
-                        #checks the list of available operators and the current character isnt one of the bracket
-                                #so not to append the brackets into the array containing the expression
+                        # checks the list of available operators and the current character isnt one of the bracket
+                        # so not to append the brackets into the array containing the expression
                         expression_in_box.append(self.__user[z])
             else:
-                if ch in all_variables: #if the character is in the list of variables
-                    self.__var.append(ch) #adds variable into a stack for variables
-                    last_push = 'var' #records the last item in the expression is a variable
+                if ch in all_variables:  # if the character is in the list of variables
+                    self.__var.append(ch)  # adds variable into a stack for variables
+                    last_push = 'var'  # records the last item in the expression is a variable
                 elif ch in all_operator:
-                    self.__op.append(ch)  #adds operator into a stack for operators
-                    last_push = 'op' #records the last item in the expression is a operator
+                    self.__op.append(ch)  # adds operator into a stack for operators
+                    last_push = 'op'  # records the last item in the expression is a operator
 
         return expression_in_box, self.__var, self.__op, last_push
-        #returns all stacks and array to be used in the boolean calculation
+        # returns all stacks and array to be used in the boolean calculation
 
 
-def assining_the_values(n):  #function for assigning the truth table numbers to each variable
+def assining_the_values(n):  # function for assigning the truth table numbers to each variable
     # number of variables
-    all_variables = ["A", "B", "C", "D"] #list of the variables available
+    all_variables = ["A", "B", "C", "D"]  # list of the variables available
     variables = []
     for i in range(n):
         variables.append(all_variables[i])
 
     # values for respective num of variables
     if n == 2:
-        values = [   # list of all numbers to be used for the truth table combination
+        values = [  # list of all numbers to be used for the truth table combination
             (0, 0),
             (0, 1),
             (1, 0),
@@ -109,53 +112,97 @@ def assining_the_values(n):  #function for assigning the truth table numbers to 
 
     dictonary = []
     for row in values:
-        each_row = dict(zip(variables, row)) #zip pairs each item in variables with the corresponding item in row, dict converts those pairs into a dictionary
+        each_row = dict(zip(variables,
+                            row))  # zip pairs each item in variables with the corresponding item in row, dict converts those pairs into a dictionary
         dictonary.append(each_row)
     return dictonary
 
 
 class boolean_calculation:
-    def __init__(self, all_stack): #stack containing the variables and the different combinations
+    def __init__(self, all_stack):  # stack containing the variables and the different combinations
         self.__opStacks = all_stack[2]
         self.__varStacks = all_stack[1]
         self.__braStacks = all_stack[0]
         self.__last_item_push = all_stack[3]
 
     def calculate_bracket(self, dictonary):
-        keyboard = {                         #assigns the boolean function to each operator symbol
+        keyboard = {  # assigns the boolean function to each operator symbol
             "V": lambda a, b: a or b,
             "^": lambda a, b: a and b,
             "¬": lambda a: not a
         }
 
-
-        bracket_answers = [] #stores the answer from each boolean calculation
-        for row in dictonary:
-            a = row[self.__braStacks[0]]
-            op = self.__braStacks[1]
-            b = row[self.__braStacks[2]]
-            bracket_answers.append(keyboard[op](a, b))    #keyboard[op](a, b) carries out the boolean calculation
-
+        # Only calculate bracket if bracket exists
+        if len(self.__braStacks) > 0:
+            bracket_answers = []  # stores the answer from each boolean calculation
+            for row in dictonary:
+                a = row[self.__braStacks[0]]
+                op = self.__braStacks[1]
+                b = row[self.__braStacks[2]]
+                bracket_answers.append(keyboard[op](a, b))  # keyboard[op](a, b) carries out the boolean calculation
+        else:
+            # If no brackets, set bracket_answers to None for each row
+            bracket_answers = [None] * len(dictonary)  # Placeholder values
 
         outer_results = []
-        return bracket_answers #so can receive results to display them in Text widget
         for i, row in enumerate(dictonary):  # Loop through each dictionary in 'dictonary' with its index 'i'
-            if self.__last_item_push == "var":
-
-                left = row[self.__varStacks[0]] # Get the variable's value from the current row dictionary
-                op = self.__opStacks[0]  # Get the operator (e.g., '+', '-', etc.) from the operator stack
-                right = bracket_answers[i]
-                result = keyboard[op](left, right) # Apply the operator function to left and right operands
-            else:
-                left = bracket_answers[i]
+            # Check if there's an outer expression to calculate
+            if len(self.__varStacks) > 0 and len(self.__opStacks) > 0 and bracket_answers[i] is not None:
+                if self.__last_item_push == "var":
+                    left = row[self.__varStacks[0]]  # Get the variable's value from the current row dictionary
+                    op = self.__opStacks[0]  # Get the operator from the operator stack
+                    right = bracket_answers[i]
+                    result = keyboard[op](left, right)  # Apply the operator function to left and right operands
+                else:
+                    left = bracket_answers[i]
+                    op = self.__opStacks[0]
+                    right = row[self.__varStacks[0]]
+                    result = keyboard[op](left, right)
+            # If only brackets, use bracket result
+            elif len(self.__braStacks) > 0:
+                result = bracket_answers[i]
+            # If simple expression like A^B
+            elif len(self.__varStacks) >= 2 and len(self.__opStacks) >= 1:
+                left = row[self.__varStacks[0]]
                 op = self.__opStacks[0]
-                right = row[self.__varStacks[0]]
+                right = row[self.__varStacks[1]]
                 result = keyboard[op](left, right)
+            # If negation like ¬A
+            elif len(self.__varStacks) == 1 and len(self.__opStacks) == 1 and self.__opStacks[0] == "¬":
+                result = keyboard["¬"](row[self.__varStacks[0]])
+            else:
+                result = None  # Unsupported format
 
             outer_results.append(result)
 
         return outer_results
 
+
+class Table:
+    def __init__(self, root, lst):
+        self.cells = []  # Store all Entry widgets in a 2D list to keep track of the table structure
+
+        # Loop through each row in the data
+        for i in range(len(lst)):
+            row_cells = []  # Create empty list to store Entry widgets for this row
+
+            # Loop through each column in the current row
+            for j in range(len(lst[i])):
+                # Create an Entry widget (editable text box) for this cell
+                e = Entry(
+                    root,  # Parent window where this Entry will be placed
+                    width=20,  # Width of the text box in characters
+                    fg='blue',  # Text color is blue
+                    font=('Arial', 16, 'bold')  # Font style, size, and weight
+                )
+                # Place the Entry widget in a grid at row i, column j
+                e.grid(row=i, column=j)
+                # Insert the data value into the Entry widget at the end position
+                e.insert(END, lst[i][j])
+                # Add this Entry widget to the current row's list
+                row_cells.append(e)
+            # Add the completed row to the main cells list
+            self.cells.append(row_cells)
 class GUI:
     def __init__(self, window):
         # Store reference to the main window
@@ -187,87 +234,49 @@ class GUI:
         self.results_text = Text(window, height=15, width=60)
         self.results_text.pack(pady=10)
 
-class Table:
-    
-    def __init__(self, root, lst, total_rows, total_columns):
-        # code for creating table
-        for i in range(total_rows):
-            for j in range(total_columns):
-                
-                self.e = Entry(root, width=20, fg='blue', #set the visuals for the truth table 
-                               font=('Arial', 16, 'bold'))
-                
-                self.e.grid(row=i, column=j)
-                self.e.insert(END, lst[i][j])
+    def calculate(self):
+        try:
+            # Get expression from Entry widget
+            expr = self.expression_entry.get()
+            # Get number of variables from Spinbox
+            n = int(self.var_spinbox.get())
 
-# data to use to create truth table
-n = int(input("Choose a number of variables from 2 to 4: ")) # Set the number of variables (2, 3, or 4)
+            # Run calculation
+            dictonary = assining_the_values(n)
+            userI = stacks(expr)
+            all_stack = userI.push()
+            userY = boolean_calculation(all_stack)
+            results = userY.calculate_bracket(dictonary)
 
-# Create headers based on number of variables
-if n == 2:
-    headers = ['A', 'B', 'Result']
-    values = [
-        headers,  # First row is headers
-        (0, 0, ''),
-        (0, 1, ''),
-        (1, 0, ''),
-        (1, 1, '')
-    ]
-elif n == 3:
-    headers = ['A', 'B', 'C', 'Result']
-    values = [
-        headers,  # First row is headers
-        (0, 0, 0, ''),
-        (0, 1, 0, ''),
-        (0, 0, 1, ''),
-        (0, 1, 1, ''),
-        (1, 0, 0, ''),
-        (1, 0, 1, ''),
-        (1, 1, 0, ''),
-        (1, 1, 1, '')
-    ]
-elif n == 4:
-    headers = ['A', 'B', 'C', 'D', 'Result']
-    values = [
-        headers,  # First row is headers
-        (0, 0, 0, 0, ''),
-        (0, 0, 0, 1, ''),
-        (0, 0, 1, 0, ''),
-        (0, 0, 1, 1, ''),
-        (0, 1, 0, 0, ''),
-        (0, 1, 0, 1, ''),
-        (0, 1, 1, 0, ''),
-        (0, 1, 1, 1, ''),
-        (1, 0, 0, 0, ''),
-        (1, 0, 0, 1, ''),
-        (1, 0, 1, 0, ''),
-        (1, 0, 1, 1, ''),
-        (1, 1, 0, 0, ''),
-        (1, 1, 0, 1, ''),
-        (1, 1, 1, 0, ''),
-        (1, 1, 1, 1, '')
-    ]
- 
-# find total number of rows and columns in list
-total_rows = len(values)
-total_columns = len(values[0])
- 
-# create root window
-root = Tk()
-t = Table(root, values, total_rows, total_columns)
-root.mainloop()
+            # Build table data
+            vars_used = list(dictonary[0].keys())
 
-user = ChooseVariable(2)
-user.choose_num_of_variable()
-n = user.get_num_of_variables()
+            # Create header row
+            table_data = [vars_used + ['Result']]
 
-dictonary = assining_the_values(n)
+            # Add data rows
+            for row, res in zip(dictonary, results):
+                values = [row[v] for v in vars_used]
+                values.append(int(res) if res is not None else 'Error')
+                table_data.append(values)
 
+            # Create new window for table
+            table_window = Toplevel(self.window)
+            table_window.title(f"Truth Table - {expr}")
+
+            # Create table in new window
+            t = Table(table_window, table_data)
+
+        except Exception as e:
+            # Show error in results text
+            self.results_text.delete(1.0, END)
+            self.results_text.insert(END, f"Error: {str(e)}")
+
+
+# Create the window and run the GUI
 window = Tk()
 app = GUI(window)
 window.mainloop()
-
-import tkinter as tk 
 
   
 
