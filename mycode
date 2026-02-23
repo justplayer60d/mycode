@@ -528,3 +528,25 @@ tk.Button(root, text="Convert to Truth Table", command=kmap_to_truth_table).grid
 
 # start the app and keep window open
 root.mainloop()
+
+
+from tkinter import *
+class homepage:
+    def __init__(self, window):
+        # Store reference to the main window
+        self.window = window
+        self.worded_boolean_button = Button(window, text="worded boolean input", font=("Arial", 14, "bold")).pack(pady=10)
+        self.karnaugh_map_button = Button(window, text="karnaugh map input", font=("Arial", 14, "bold")).pack(pady=15)
+
+        # Set the title that appears at the top of the window
+        window.title("Boolean Calculator")
+       
+
+        # Create and display the main heading label
+        Label(window, text="boolean algebra and karnaugh map calculator", font=("Arial", 14, "bold")).pack(pady=20)
+
+
+
+window = Tk()
+app = homepage(window)
+window.mainloop()
