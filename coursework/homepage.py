@@ -1,5 +1,5 @@
 from coursework import wordedalgebra
-from coursework
+from coursework import karnaughMap
 from tkinter import *
 
 
@@ -22,4 +22,5 @@ class homepage:
         print("x")
 window = Tk()
 app = homepage(window)
+
 window.mainloop()
